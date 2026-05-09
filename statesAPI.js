@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
 const PORT = process.env.PORT || 3500;
@@ -15,13 +16,24 @@ app.use(express.urlencoded({ extended: false }));
 // built-in middleware for json
 app.use(express.json());
 
-// no static files since this is purely an api
-// remember to check this if there are test parameters asking for 404 files, etc. 
+// serve static files
+app.use(express.static(path.join(__dirname, '/public')));
 
-// routes - only using API
+// routes 
+app.use('/', require('./routes/root'));
 app.use('/states', require('./routes/api/states.js'));
 
-// don't think I need the /* 404 for a pure api. but remember to add if there is an error
+// 404 handling - remember to check messages if test fails
+app.all('/*anything', (req, res) => {
+    res.status(404);
+    if (req.accepts('html')) {
+        res.sendFile(path.join(__dirname, 'views', '404.html'));
+    } else if (req.accepts('json')) {
+        res.json({error: "404 Not Found" });
+    } else {
+        res.type('txt').send("404 not found, Stinky!");
+    }
+});
 
 // no error handler mentioned in rubric
 
