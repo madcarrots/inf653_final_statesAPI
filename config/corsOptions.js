@@ -15,7 +15,10 @@ const corsOptions = {
             callback(new Error('You shall not pass!'));  // remember to change this if test want specific message
         }
     },
-    optionsSuccessStatus: 200
-}
+    optionsSuccessStatus: 200,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+
+};
 
 module.exports = corsOptions;
