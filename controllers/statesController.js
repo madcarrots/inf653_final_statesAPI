@@ -11,20 +11,23 @@ const getAllStates = (req, res) => {
 
 const getState = (req, res) => {
     // check if id is 2 characters
-    const { abbr } = req.params;
-    if (abbr.length !== 2) {
+    const { id } = req.params;
+    if (id.length !== 2) {
         return res.status(400).json({
             status: "error",
             message: "Invalid State Abbreviation.  ID must be exactly 2 letters.",
         });
-    } else {
-        // make characters uppercase
-        stateAbbr = abbb.toUpperCase();
-    }
+    } 
+
+    // make characters uppercase
+    // does not need to be elsed from above 
+    stateAbbr = id.toUpperCase();
+    
     // search for state based on the stateAbbr
-    const state = data.states.find( st => st.id === stateAbbr);
+    const state = data.states.find( st => st.code === stateAbbr); // i was using id as in example vids. but it needs to match the param name in json file.  so "code"
+    
     if (!state) {
-        return res.status(400).json({ "message": `State ID ${req.params.id} not found.` });
+        return res.status(400).json({ "message": `State ID ${id} not found.` });
     }
     res.json(state);
 }
