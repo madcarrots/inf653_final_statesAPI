@@ -21,7 +21,7 @@ const getState = (req, res) => {
 
     // make characters uppercase
     // does not need to be elsed from above 
-    stateAbbr = id.toUpperCase();
+    const stateAbbr = id.toUpperCase();
     
     // search for state based on the stateAbbr
     const state = data.states.find( st => st.code === stateAbbr); // i was using id as in example vids. but it needs to match the param name in json file.  so "code"
