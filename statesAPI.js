@@ -8,7 +8,6 @@ const PORT = process.env.PORT || 3500;
 // no logger required
 
 // cors
-//app.options('*', cors(corsOptions));
 app.use(cors(corsOptions));
 
 
