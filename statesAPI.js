@@ -1,11 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
+const mongoose = require('mongoose');
+const connectDB = require('./config/dbConn');
 const PORT = process.env.PORT || 3500;
 
-// no logger required
+
+// connect to mongo db
+connectDB();
 
 // cors
 app.use(cors(corsOptions));
@@ -40,4 +45,8 @@ app.all('/*anything', (req, res) => {
 
 // no logging/error no listener needed
 // wrong!  you need to listen to API requests!
-app.listen(PORT, () => console.log(`Server running on port ${PORT}` ));
+
+mongoose.connection.once('open', () => {
+    console.log('connected to MongoDB');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}` ));
+})
