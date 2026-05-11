@@ -4,7 +4,8 @@ const whitelist = [
     'http://localhost:3500',
     'https://dazzling-snickerdoodle-777101.netlify.app', 
     'https://inf653-final-statesapi.onrender.com', 
-    'https://serene-roentgen-345cd7.netlify.app'
+    'https://serene-roentgen-345cd7.netlify.app', 
+    '*'
 ];
 
 const corsOptions = {
