@@ -1,5 +1,7 @@
 const { parseArgs } = require('node:util');
+const State = require('../model/State');
 
+// stopped here, think i just added the model state above.. 
 const data = {
     states: require('../model/statesData.json'),
     setStates: function (data) { this.states = data }
