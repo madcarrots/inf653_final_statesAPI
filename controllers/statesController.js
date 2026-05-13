@@ -2,14 +2,29 @@ const { parseArgs } = require('node:util');
 const State = require('../model/State');
 
 // stopped here, think i just added the model state above.. 
-const data = {
-    states: require('../model/statesData.json'),
-    setStates: function (data) { this.states = data }
+
+
+const getAllStates = async (req, res) => {
+    const states = await State.find();
+    if (!states) return res.status(204).json({ 'message': 'No states found.' });
 }
 
-const getAllStates = (req, res) => {
-    res.json(data.states);
-}
+const updateFunFact = async (req, res) => {
+    if(!req?.body?.id) {
+        return res.status(400).json({ 'message': 'State ID parameter is required.'})
+    }
+
+    const { newFunFact } = req.body;
+    const state = await State.findOne({_id: req.params.code}).exec();
+    if (!state) {
+        return res.status(204).json({ "message": `No state has the abbreviation ${req.params.code}. `});
+    }
+    if (req.body?.funFact) { $push: { funacts: newFunFact } }
+    const result = await state.save();
+    res.json(result);
+};
+
+
 
 const getState = (req, res) => {
     // check if id is 2 characters

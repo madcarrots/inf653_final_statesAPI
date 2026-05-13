@@ -1,8 +1,12 @@
-const { Int32 } = require('mongodb');
+const { Int32, ObjectId } = require('mongodb');
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const stateSchema = new Schema({
+    _id: {
+        type: ObjectId,
+        required: true
+    },
     state: {
         type: String,
         required: true,
@@ -26,7 +30,7 @@ const stateSchema = new Schema({
         unique: true
     }, 
     admission_date: {
-        type: Date, 
+        type: String, 
         required: true
     }, 
     admission_number: {
@@ -71,8 +75,8 @@ const stateSchema = new Schema({
         type: String
     },
     funfacts: {
-        type: [String],
-        default: []
+        type: [],
+        
     }
 });
 
