@@ -5,8 +5,19 @@ const State = require('../model/State');
 
 
 const getAllStates = async (req, res) => {
-    const states = await State.find();
-    if (!states) return res.status(204).json({ 'message': 'No states found.' });
+    try {
+        const states = await State.find();
+        if (!states || states.length === 0) {
+            return res.status(204).json({ 'message': 'No states found.' });
+        }
+
+        res.json(states);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({"message": err.message });
+    }
+    
+
 }
 
 const updateFunFact = async (req, res) => {
@@ -15,7 +26,7 @@ const updateFunFact = async (req, res) => {
     }
 
     const { newFunFact } = req.body;
-    const state = await State.findOne({_id: req.params.code}).exec();
+    const state = await State.findOne({code: req.params.code}).exec();
     if (!state) {
         return res.status(204).json({ "message": `No state has the abbreviation ${req.params.code}. `});
     }
@@ -26,10 +37,10 @@ const updateFunFact = async (req, res) => {
 
 
 
-const getState = (req, res) => {
+const getState =  async (req, res) => {
     // check if id is 2 characters
-    const { id } = req.params;
-    if (id.length !== 2) {
+    const { code } = req.params;
+    if (code.length !== 2) {
         return res.status(400).json({
             status: "error",
             message: "Invalid State Abbreviation.  ID must be exactly 2 letters.",
@@ -38,15 +49,18 @@ const getState = (req, res) => {
 
     // make characters uppercase
     // does not need to be elsed from above 
-    const stateAbbr = id.toUpperCase();
+    const stateAbbr = code.toUpperCase();
     
     // search for state based on the stateAbbr
-    const state = data.states.find( st => st.code === stateAbbr); // i was using id as in example vids. but it needs to match the param name in json file.  so "code"
-    
-    if (!state) {
-        return res.status(400).json({ "message": `State ID ${id} not found.` });
+        try {
+        const state = await State.find( st => st.code === stateAbbr);
+        if (!state || state.length === 0) return res.status(204).json({ 'message': `State ID ${code} not found.` });
+        res.json(state);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({"message": err.message });
     }
-    res.json(state);
+
 }
 
 
