@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const stateSchema = new Schema({
-    _state: { type: String, required: true, unique: true },
+    state: { type: String, required: true, unique: true },   // ← fixed: no underscore
     slug: { type: String, required: true, unique: true },
-    code: { type: String, required: true, unique: true, uppercase: true }, // auto-uppercase nice-to-have
+    code: { type: String, required: true, unique: true, uppercase: true },
     nickname: String,
     website: String,
     admission_date: String,
@@ -14,16 +14,14 @@ const stateSchema = new Schema({
     population: Number,
     population_rank: Number,
     constitution_url: String,
-    state_flag_url: String, 
+    state_flag_url: String,
     state_seal_url: String,
     map_image_url: String,
     landscape_background_url: String,
     skyline_background_url: String,
     twitter_url: String,
     facebook_url: String,
-    funfacts: [],
-},  {timestamps: true });
-        
-
+    funfacts: [{ type: String }]     // ← correct way for array of strings
+}, { timestamps: true });
 
 module.exports = mongoose.model('State', stateSchema);

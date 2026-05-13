@@ -21,7 +21,7 @@ const getAllStates = async (req, res) => {
 }
 
 const updateFunFact = async (req, res) => {
-    if(!req?.body?.id) {
+    if(!req?.params?.code) {
         return res.status(400).json({ 'message': 'State ID parameter is required.'})
     }
 
@@ -30,7 +30,7 @@ const updateFunFact = async (req, res) => {
     if (!state) {
         return res.status(204).json({ "message": `No state has the abbreviation ${req.params.code}. `});
     }
-    if (req.body?.funFact) { $push: { funacts: newFunFact } }
+    if (req.body?.funFact) { $push: { funfacts: newFunFact } }
     const result = await state.save();
     res.json(result);
 };
@@ -53,7 +53,7 @@ const getState =  async (req, res) => {
     
     // search for state based on the stateAbbr
         try {
-        const state = await State.find( st => st.code === stateAbbr);
+        const state = await State.findOne({ code: stateAbbr });
         if (!state || state.length === 0) return res.status(204).json({ 'message': `State ID ${code} not found.` });
         res.json(state);
     } catch (err) {
