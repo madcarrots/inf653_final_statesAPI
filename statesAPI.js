@@ -27,7 +27,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 // routes 
 app.use('/', require('./routes/root'));
-app.use('/states', require('./routes/api/states.js'));
+app.use('/states', require('./routes/api/states'));
 
 // 404 handling - remember to check messages if test fails
 app.all('/*anything', (req, res) => {
