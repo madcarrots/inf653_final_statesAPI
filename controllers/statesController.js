@@ -1,5 +1,6 @@
 const { parseArgs } = require('node:util');
 const State = require('../model/State');
+const verifier = require('../middleware/verifier');
 
 // stopped here, think i just added the model state above.. 
 
@@ -38,18 +39,8 @@ const updateFunFact = async (req, res) => {
 
 
 const getState =  async (req, res) => {
-    // check if id is 2 characters
-    const { code } = req.params;
-    if (code.length !== 2) {
-        return res.status(400).json({
-            status: "error",
-            message: "Invalid State Abbreviation.  ID must be exactly 2 letters.",
-        });
-    } 
-
-    // make characters uppercase
-    // does not need to be elsed from above 
-    const stateAbbr = code.toUpperCase();
+   
+    const stateAbbr = verifier();
     
     // search for state based on the stateAbbr
         try {
@@ -63,6 +54,10 @@ const getState =  async (req, res) => {
 
 }
 
+
+const getContig = async (req, res) => {
+
+}
 
 
 module.exports = {
