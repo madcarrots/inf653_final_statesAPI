@@ -157,11 +157,12 @@ const getAdmission = async (req, res) => {
 };
 
 
-const createFunfact = async (req, res) => {
+const createFunfact = async (req, res) => {   
     try {
         if (!req.body?.funfact) {
             return res.status(400).json({ message: 'State fun facts value required' });
         }
+
         const state = await State.findOne({ code: req.stateCode }).exec();
 
         if (!state) { 
@@ -181,11 +182,11 @@ const createFunfact = async (req, res) => {
 
 const updateFunFact = async (req, res) => {
     try {
-        const { index, funcfact } = req.body;
+        const { index, funfact } = req.body;
 
         if ( funfact === undefined) {
             return res.status(400).json({ message: 'State fun facts value required' });
-        } else if (index === unbdefined) {
+        } else if (index === undefined) {
             return res.status(400).json({ message: 'State fun facts index value required' });
         }
         const state = await State.findOne({ code: req.stateCode }).exec();
@@ -193,13 +194,19 @@ const updateFunFact = async (req, res) => {
         if (!state) { 
             return res.status(404).json({ message: "Invalid state abbreviation parameter"});
         }
-        state.funfacts[req.body.index - 1] = [req.body.funfact];
 
+        const idx = Number(index) - 1;  
+        if (idx < 0 || idx >= state.funfacts.length) {
+            return res.status(400).json({ message: `Index ${index} out of range` });
+        }
+
+        state.funfacts[idx] = funfact;   
         const result = await state.save();
-        res.status(201).json(result);
-    }   catch (err) {
-            console.error(err);
-            res.status(500).json({ message: err.message });
+
+        res.json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
     }
 };
 
@@ -209,8 +216,8 @@ const deleteFunFact = async (req, res) => {
             return res.status(400).json({ message: 'State fun facts index value required' });
         }
         const state = await State.findOne({ code: req.stateCode }).exec()
-            .select('state funfacts')
-            .lean();
+            .select('state funfacts');
+            
         
 
         if (!state) { 
@@ -219,8 +226,9 @@ const deleteFunFact = async (req, res) => {
         if ( !state.funfacts || state.funfacts.length === 0 ) {
             return res.json({ message: `No Fun Facts found for ${state.state}` });
         }
+        const idx = Number(req.body.index) - 1;
 
-        state.funfacts[req.body.index - 1] = [];
+        state.funfacts.splice(idx, 1);
 
         const result = await state.save();
         res.json(result);
