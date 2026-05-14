@@ -159,7 +159,7 @@ const getAdmission = async (req, res) => {
 
 const createFunfact = async (req, res) => {   
     try {
-        if (!req.body?.funfact) {
+        if (!req.body?.funfacts) {
             return res.status(400).json({ message: 'State fun facts value required' });
         }
         if ( !Array.isArray(req.body.funfacts)) {
