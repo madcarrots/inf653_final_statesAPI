@@ -49,6 +49,7 @@ const getContigStates = async (req, res) => {
     }
 };
 
+/*
 const updateFunFact = async (req, res) => {
     if (!req?.params?.code) {
         return res.status(400).json({ 'message': 'State ID parameter is required.' });
@@ -69,6 +70,8 @@ const updateFunFact = async (req, res) => {
     const result = await state.save();
     res.json(result);
 };
+*/
+
 
 const getFunFact = async (req, res) => {
     try {
@@ -154,6 +157,80 @@ const getAdmission = async (req, res) => {
 };
 
 
+const createFunfact = async (req, res) => {
+    try {
+        if (!req.body?.funfact) {
+            return res.status(400).json({ message: 'State fun facts value required' });
+        }
+        const state = await State.findOne({ code: req.stateCode }).exec();
+
+        if (!state) { 
+            return res.status(404).json({ message: "Invalid state abbreviation parameter"});
+        }
+
+        state.funfacts.push(req.body.funfact);
+        const result = await state.save();
+
+        res.status(201).json(result);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: err.message });
+    }
+};
+
+
+const updateFunFact = async (req, res) => {
+    try {
+        const { index, funcfact } = req.body;
+
+        if ( funfact === undefined) {
+            return res.status(400).json({ message: 'State fun facts value required' });
+        } else if (index === unbdefined) {
+            return res.status(400).json({ message: 'State fun facts index value required' });
+        }
+        const state = await State.findOne({ code: req.stateCode }).exec();
+
+        if (!state) { 
+            return res.status(404).json({ message: "Invalid state abbreviation parameter"});
+        }
+        state.funfacts[req.body.index - 1] = [req.body.funfact];
+
+        const result = await state.save();
+        res.status(201).json(result);
+    }   catch (err) {
+            console.error(err);
+            res.status(500).json({ message: err.message });
+    }
+};
+
+const deleteFunFact = async (req, res) => {
+    try {
+        if (!req.body?.index) {
+            return res.status(400).json({ message: 'State fun facts index value required' });
+        }
+        const state = await State.findOne({ code: req.stateCode }).exec()
+            .select('state funfacts')
+            .lean();
+        
+
+        if (!state) { 
+            return res.status(404).json({ message: "Invalid state abbreviation parameter"});
+        }
+        if ( !state.funfacts || state.funfacts.length === 0 ) {
+            return res.json({ message: `No Fun Facts found for ${state.state}` });
+        }
+
+        state.funfacts[req.body.index - 1] = [];
+
+        const result = await state.save();
+        res.json(result);
+    } catch (err) {
+            console.error(err);
+            res.status(500).json({ message: err.message });
+    }
+};
+
+
 
 module.exports = {
     getAllStates,
@@ -164,5 +241,8 @@ module.exports = {
     getCapital,
     getNickname,
     getPopulation,
-    getAdmission
+    getAdmission, 
+    createFunfact,
+    deleteFunFact
+
 };

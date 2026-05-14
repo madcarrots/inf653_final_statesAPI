@@ -30,5 +30,10 @@ router.route('/:code/admission')
     .get(validateStateCode, statesController.getAdmission);
 
 
+router.route('/:code/funfact')
+    .post(validateStateCode, statesController.createFunfact)
+    .put(validateStateCode, statesController.updateFunFact)
+    .delete(validateStateCode, statesController.deleteFunFact)
+
 
 module.exports = router;
