@@ -1,3 +1,4 @@
 node_modules
 model/MergeModel.js
 model/User.js
+*.bak

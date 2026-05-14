@@ -22,6 +22,6 @@ const stateSchema = new Schema({
     twitter_url: String,
     facebook_url: String,
     funfacts: [{ type: String }]     // ← correct way for array of strings
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model('State', stateSchema);
