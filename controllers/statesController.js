@@ -73,11 +73,11 @@ const updateFunFact = async (req, res) => {
 const getFunFact = async (req, res) => {
     try {
         const state = await State.findOne({ code: req.stateCode })
-            .select('funfacts')
+            .select('state funfacts')
             .lean();
         
         if (!state || !state.funfacts || state.funfacts.length === 0) {
-            return res.status(404).json({ message: `No Fun Facts found for ${req.stateCode}` });
+            return res.json({ message: `No Fun Facts found for ${state.state}` });
         }
 
         // random fun fact
