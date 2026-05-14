@@ -3,7 +3,7 @@ const validateStateCode = (req, res, next) => {
 
     if (!code || code.length !==2) {
         return res.status(400).json({
-            "error": "Invalid state abbreviation parameter"
+            error: "Invalid state abbreviation parameter"
         });
     }
 
