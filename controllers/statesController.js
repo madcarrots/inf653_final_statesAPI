@@ -76,7 +76,7 @@ const getFunFact = async (req, res) => {
             .select('state funfacts')
             .lean();
         
-        if (!state || !state.funfacts || state.funfacts.length === 0) {
+        if ( !state.funfacts || state.funfacts.length === 0 ) {
             return res.json({ message: `No Fun Facts found for ${state.state}` });
         }
 
@@ -85,7 +85,8 @@ const getFunFact = async (req, res) => {
         res.json({ funfact: randomFact });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ message: err.message });
+            res.status(400).json({ message: "Invalid state abbreviation parameter" });
+        
     }
 };
 
