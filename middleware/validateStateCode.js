@@ -3,7 +3,7 @@ const validateStateCode = (req, res, next) => {
 
     if (!code || code.length !==2) {
         return res.status(400).json({
-            "error": "Invalid State Abbreviation. ID must be exactly 2 letters."
+            "error": "Invalid state abbreviation parameter"
         });
     }
 
