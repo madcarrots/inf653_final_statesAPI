@@ -15,7 +15,8 @@ const getAllStates = async (req, res) => {
 
 const getState = async (req, res) => {
     try {
-        const stateAbbr = req.stateCode;
+        const stateAbbr = req.stateCode;   // ← comes from middleware
+
         const state = await State.findOne({ code: stateAbbr }).lean();
 
         if (!state) {
@@ -52,16 +53,16 @@ const updateFunFact = async (req, res) => {
         return res.status(400).json({ 'message': 'State ID parameter is required.' });
     }
 
-    const { newFunFact } = req.body;   // you were using funFact before
+    const { newFunFact } = req.body;
 
-    const state = await State.findOne({ code: req.params.code }).exec();
+    const state = await State.findOne({ code: req.params.code.toUpperCase() }).exec();
 
     if (!state) {
         return res.status(204).json({ "message": `No state has the abbreviation ${req.params.code}.` });
     }
 
-    if (req.body?.funFact) {   // ← fix the logic here
-        state.funfacts.push(newFunFact);   // simpler and correct way
+    if (req.body?.funFact && newFunFact) {
+        state.funfacts.push(newFunFact);   // Correct way
     }
 
     const result = await state.save();

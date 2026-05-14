@@ -11,10 +11,7 @@ router.route('/')
         return statesController.getAllStates(req, res, next);
     });
 
-
-
 router.route('/:code')
     .get(validateStateCode, statesController.getState);
-
 
 module.exports = router;
