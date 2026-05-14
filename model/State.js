@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const stateSchema = new Schema({
-    state: { type: String, required: true, unique: true },   // ← fixed: no underscore
+    state: { type: String, required: true, unique: true },   
     slug: { type: String, required: true, unique: true },
     code: { type: String, required: true, unique: true, uppercase: true },
     nickname: String,
@@ -21,7 +21,7 @@ const stateSchema = new Schema({
     skyline_background_url: String,
     twitter_url: String,
     facebook_url: String,
-    funfacts: [{ type: String }]     // ← correct way for array of strings
+    funfacts: [{ type: String }]     
 });
 
 module.exports = mongoose.model('State', stateSchema);

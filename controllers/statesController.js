@@ -17,7 +17,7 @@ const getState = async (req, res) => {
     try {
         const stateAbbr = req.stateCode;   // ← comes from middleware
 
-        const state = await State.findOne({ code: stateAbbr }).lean();
+        const state = await State.findOne({ code: stateAbbr }).select('-_id').lean();
 
         if (!state) {
             return res.status(204).json({ 'message': `State ID ${stateAbbr} not found.` });
