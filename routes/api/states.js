@@ -14,4 +14,21 @@ router.route('/')
 router.route('/:code')
     .get(validateStateCode, statesController.getState);
 
+router.route('/:code/funfact')
+    .get(validateStateCode, statesController.getFunFact);
+
+router.route('/:code/capital')
+    .get(validateStateCode, statesController.getCapital);
+
+router.route('/:code/nickname')
+    .get(validateStateCode, statesController.getNickname);
+
+router.route('/:code/Population')
+    .get(validateStateCode, statesController.getPopulation);
+
+router.route('/:code/admission')
+    .get(validateStateCode, statesController.getAdmission);
+
+
+
 module.exports = router;
